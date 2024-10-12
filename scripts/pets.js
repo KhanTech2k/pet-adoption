@@ -13,15 +13,48 @@ const loadPets = () => {
 const loadCategoryPets = (id) => {
     fetch(`https://openapi.programming-hero.com/api/peddy/category/${id}`)
         .then((res) => res.json())
-        .then((data) => displayPetsCard(data.data))
+        .then((data) => {
+            removeActiveClass()
+            const activeBtn = document.getElementById(`${id}`);
+            activeBtn.classList.add("active")
+            displayPetsCard(data.data)
+        })
         .catch((error) => console.log(error));
+};
+const removeActiveClass = () => {
+    const buttons = document.getElementsByClassName("category-btn");
+    for (let btn of buttons) {
+        btn.classList.remove("active")
+    }
+}
+const loadPetsDetails = async (petId) => {
+    console.log(petId);
+    const uri = `https://openapi.programming-hero.com/api/peddy/pet/${petId}`;
+    const res = await fetch(uri);
+    const data = await res.json();
+    displayPetDetails(data.petData)
+};
+const displayPetDetails = (petData) => {
+    console.log(petData);
+    const detailContainer = document.getElementById('modal-content');
+    detailContainer.innerHTML =
+        ` <img src= ${petData.image} alt="Pets" />
+            <h2 class="card-title">${petData.pet_name}</h2>
+            <p>Breed:${petData.breed?.length >= 0 ? `${petData.breed}` : "Not Available"}</p>
+            <p>Birth:${petData.date_of_birth?.length >= 0 ? `${petData.date_of_birth}` : "Not Available"}</p>
+            <p>Gender:${petData.gender?.length >= 0 ? `${petData.gender}` : "Not Available"}</p>
+            <p>Price:${petData.price > 0 ? `${petData.price}$` : "Not Available"}</p>
+            <h2 class="card-title">Detail Information</h2>
+            <h2>${petData.pet_details}</h2>
+    `;
+    document.getElementById('showModal').click();
 };
 const displayCategories = (categories) => {
     const categoryContainer = document.getElementById('categories');
     categories.forEach(item => {
         const btn = document.createElement('button');
         btn.classList = 'bg-gray-100';
-        btn.innerHTML = `<button onclick="loadCategoryPets('${item.category}')" id="${item.category}" class="flex justify-between px-4 py-3 items-center font-bold gap-2">
+        btn.innerHTML = `<button onclick="loadCategoryPets('${item.category}')" id="${item.category}" class="flex justify-between px-4 py-3 items-center font-bold gap-2 category-btn">
                             <img class="w-[20px]" src="${item.category_icon}"/> ${item.category}
                          </button>`;
         categoryContainer.append(btn);
@@ -30,7 +63,7 @@ const displayCategories = (categories) => {
 const displayPetsCard = (pets) => {
     const allPetsContainers = document.getElementById('pets');
     allPetsContainers.innerHTML = "";
-    if(pets.length == 0){
+    if (pets.length == 0) {
         allPetsContainers.innerHTML = `
         <div>
         <img src="images/error.webp" alt="">
@@ -59,7 +92,9 @@ const displayPetsCard = (pets) => {
                         <div class="card-actions">
                         <button class="btn"><i class="fa-regular fa-thumbs-up"></i></button>
                         <button class="btn">Adopt</button>
-                        <button class="btn">Details</button>
+                        <div>
+                        <button onclick="loadPetsDetails('${pet.petId}')" class="btn">Details</button>
+                        </div>
                         </div>
                     </div>
                   </div>
