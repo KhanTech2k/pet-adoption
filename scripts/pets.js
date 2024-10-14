@@ -10,6 +10,12 @@ const loadPets = () => {
         .then((data) => displayPetsCard(data.pets))
         .catch((error) => console.log(error));
 };
+const loadSortPets = () => {
+    fetch("https://openapi.programming-hero.com/api/peddy/pets")
+        .then((res) => res.json())
+        .then((data) => sortPet(data.pets))
+        .catch((error) => console.log(error));
+};
 const loadCategoryPets = (id) => {
     fetch(`https://openapi.programming-hero.com/api/peddy/category/${id}`)
         .then((res) => res.json())
@@ -76,14 +82,29 @@ const displayPetDetails = (petData) => {
     console.log(petData);
     const detailContainer = document.getElementById('modal-content');
     detailContainer.innerHTML =
-        ` <img src= ${petData.image} alt="Pets" />
-            <h2 class="card-title">${petData.pet_name}</h2>
-            <p>Breed:${petData.breed?.length >= 0 ? `${petData.breed}` : "Not Available"}</p>
-            <p>Birth:${petData.date_of_birth?.length >= 0 ? `${petData.date_of_birth}` : "Not Available"}</p>
-            <p>Gender:${petData.gender?.length >= 0 ? `${petData.gender}` : "Not Available"}</p>
-            <p>Price:${petData.price > 0 ? `${petData.price}$` : "Not Available"}</p>
-            <h2 class="card-title">Detail Information</h2>
-            <h2>${petData.pet_details}</h2>
+        ` <img class="rounded-lg w-full" src= ${petData.image} alt="Pets" />
+            <h2 class="card-title mt-4 mb-2">${petData.pet_name}</h2>
+            <div class="flex items-center gap-1">
+            <img src="images/frame1.png" alt="">
+            <p>Breed: ${petData.breed?.length >= 0 ? `${petData.breed}` : "Not Available"}</p>
+            </div>
+            <div class="flex items-center gap-1">
+            <img src="images/frame2.png" alt="">
+            <p>Birth: ${petData.date_of_birth?.length >= 0 ? `${petData.date_of_birth}` : "Not Available"}</p>
+            </div>
+            <div class="flex items-center gap-1">
+            <img src="images/frame3.png" alt="">
+            <p>Gender: ${petData.gender?.length >= 0 ? `${petData.gender}` : "Not Available"}</p>
+            </div>
+            <div class="flex items-center gap-1">
+            <img src="images/frame4.png" alt="">
+            <p>Price: ${petData.price > 0 ? `${petData.price}$` : "Not Available"}</p>
+            </div>
+            
+            
+            
+            <h2 class="card-title mt-4">Detail Information</h2>
+            <h2 class="mb-4">${petData.pet_details}</h2>
     `;
     document.getElementById('showModal').click();
 };
@@ -91,8 +112,8 @@ const displayCategories = (categories) => {
     const categoryContainer = document.getElementById('categories');
     categories.forEach(item => {
         const btn = document.createElement('button');
-        btn.classList = 'border border-stone-200 rounded-2xl';
-        btn.innerHTML = `<button onclick="loadCategoryPets('${item.category}')" id="${item.category}" class="flex justify-between px-5 py-3 items-center font-bold gap-2 rounded-2xl w-full category-btn">
+        btn.classList = 'border border-stone-200 rounded-2xl mx-10 lg:mx-0';
+        btn.innerHTML = `<button onclick="loadCategoryPets('${item.category}')" id="${item.category}" class="flex justify-center lg:justify-between  px-5 py-4 lg:py-3 items-center font-bold gap-2 rounded-2xl w-full category-btn">
         <img class="w-[20px]" src="${item.category_icon}"/> ${item.category}</button>`;
         categoryContainer.append(btn);
     });
@@ -102,19 +123,21 @@ const displayPetsCard = (pets) => {
     allPetsContainers.innerHTML = "";
     if (pets.length == 0) {
         allPetsContainers.innerHTML = `
-        <div>
+        <div class=lg:col-span-3 md:grid-cols-2 lg:grid-cols-3 auto-rows-min">
+        <div class="flex flex-col justify-center items-center hero bg-base-200 p-5 rounded-xl">
         <img src="images/error.webp" alt="">
-        <h2>No Information Available</h2>
+        <h2 class="text-4xl font-bold">No Information Available</h2>
         <p>This subject-related information is not available.</p>
+        </div>
         </div>
         `;
         return;
     }
     pets.forEach((pet) => {
         const card = document.createElement('div');
-        card.classList = 'card card-compact m-2 ';
+        card.classList = 'card card-compact mx-2 mb-4 ';
         card.innerHTML = `
-        <div class="card card-compact bg-base-100 w-full  shadow-xl ">
+        <div class="card card-compact bg-base-100 w-full  border border-stone-200 ">
                 <div class="p-4">
                     <figure class =" w-full relative ">
                       <img class="w-full md:h-[200px] lg:h-[200px]  rounded-lg"
@@ -126,27 +149,27 @@ const displayPetsCard = (pets) => {
                       <h2 class="card-title">${pet.pet_name}</h2>
                       <div class="flex items-center gap-1">
                       <img src="images/frame1.png" alt="">
-                      <p>Breed:${pet.breed?.length >= 0 ? `${pet.breed}` : "Not Available"}</p>
+                      <p>Breed: ${pet.breed?.length >= 0 ? `${pet.breed}` : "Not Available"}</p>
                       </div>
                       <div class="flex items-center gap-1">
                       <img src="images/frame2.png" alt="">
-                      <p>Birth:${pet.date_of_birth?.length >= 0 ? `${pet.date_of_birth}` : "Not Available"}</p>
+                      <p>Birth: ${pet.date_of_birth?.length >= 0 ? `${pet.date_of_birth}` : "Not Available"}</p>
                       </div>
                       <div class="flex items-center gap-1">
                       <img src="images/frame3.png" alt="">
-                      <p>Gender:${pet.gender?.length >= 0 ? `${pet.gender}` : "Not Available"}</p>
+                      <p>Gender: ${pet.gender?.length >= 0 ? `${pet.gender}` : "Not Available"}</p>
                       </div>
                       <div class="flex items-center gap-1">
                       <img src="images/frame4.png" alt="">
-                      <p>Price:${pet.price > 0 ? `${pet.price}$` : "Not Available"}</p>
+                      <p>Price: ${pet.price > 0 ? `${pet.price}$` : "Not Available"}</p>
                       </div>
-                        <div class="card-actions mt-4">
-                        <button onclick="loadClickedPets('${pet.petId}')"class="btn px-7 border-teal-500"><i class="fa-regular fa-thumbs-up"></i></button>
-                        <button onclick="loadAdoptPets('${pet.petId}',this)" class="btn border-teal-500">Adopt</button>
+                      <div class="card-actions mt-4 flex justify-center gap-x-6">
+                        <button onclick="loadClickedPets('${pet.petId}')"class="btn px-7  bg-white hover:bg-[#0E7A81]  hover:text-white transition-colors ease-in duration-100 border-teal-500 font-extrabold"><i class="fa-regular fa-thumbs-up"></i></button>
+                        <button onclick="loadAdoptPets('${pet.petId}',this)" class="btn bg-white hover:bg-[#0E7A81]  hover:text-white transition-colors ease-in duration-100 border-teal-500 font-extrabold">Adopt</button>
                         <div>
-                        <button onclick="loadPetsDetails('${pet.petId}')" class="btn border-teal-500">Details</button>
+                        <button onclick="loadPetsDetails('${pet.petId}')" class="btn bg-white hover:bg-[#0E7A81]  hover:text-white transition-colors ease-in duration-100 border-teal-500 font-extrabold">Details</button>
                         </div>
-                        </div>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -156,3 +179,10 @@ const displayPetsCard = (pets) => {
 }
 loadPets();
 loadCategory();
+document.getElementById('sorting').addEventListener('click', function () {
+    loadSortPets()
+})
+const sortPet = (pets) => {
+    pets.sort((a, b) => b.price - a.price);
+    displayPetsCard(pets)
+}
