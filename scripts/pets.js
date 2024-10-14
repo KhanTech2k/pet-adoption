@@ -17,13 +17,17 @@ const loadSortPets = () => {
         .catch((error) => console.log(error));
 };
 const loadCategoryPets = (id) => {
+    const allPetsContainers = document.getElementById('pets');
+    allPetsContainers.innerHTML = `<div class="flex justify-center lg:col-span-3 items-center mx my-64"><span class="loading loading-bars loading-lg "></span></div>`;
     fetch(`https://openapi.programming-hero.com/api/peddy/category/${id}`)
         .then((res) => res.json())
         .then((data) => {
+            setTimeout(() => {
             removeActiveClass()
             const activeBtn = document.getElementById(`${id}`);
             activeBtn.classList.add("active")
-            displayPetsCard(data.data)
+            displayPetsCard(data.data);
+        }, 3000);
         })
         .catch((error) => console.log(error));
 };
