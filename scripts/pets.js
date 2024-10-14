@@ -22,10 +22,11 @@ const loadCategoryPets = (id) => {
     fetch(`https://openapi.programming-hero.com/api/peddy/category/${id}`)
         .then((res) => res.json())
         .then((data) => {
-            setTimeout(() => {
             removeActiveClass()
             const activeBtn = document.getElementById(`${id}`);
             activeBtn.classList.add("active")
+            setTimeout(() => {
+            
             displayPetsCard(data.data);
         }, 3000);
         })
@@ -128,7 +129,7 @@ const displayPetsCard = (pets) => {
     if (pets.length == 0) {
         allPetsContainers.innerHTML = `
         <div class=lg:col-span-3 md:grid-cols-2 lg:grid-cols-3 auto-rows-min">
-        <div class="flex flex-col justify-center items-center hero bg-base-200 p-5 rounded-xl">
+        <div class="flex flex-col justify-center items-center hero bg-base-200 p-20 rounded-xl">
         <img src="images/error.webp" alt="">
         <h2 class="text-4xl font-bold">No Information Available</h2>
         <p>This subject-related information is not available.</p>
@@ -167,7 +168,7 @@ const displayPetsCard = (pets) => {
                       <img src="images/frame4.png" alt="">
                       <p>Price: ${pet.price > 0 ? `${pet.price}$` : "Not Available"}</p>
                       </div>
-                      <div class="card-actions mt-4 flex justify-center gap-x-6">
+                      <div class="card-actions mt-4 flex justify-center">
                         <button onclick="loadClickedPets('${pet.petId}')"class="btn px-7  bg-white hover:bg-[#0E7A81]  hover:text-white transition-colors ease-in duration-100 border-teal-500 font-extrabold"><i class="fa-regular fa-thumbs-up"></i></button>
                         <button onclick="loadAdoptPets('${pet.petId}',this)" class="btn bg-white hover:bg-[#0E7A81]  hover:text-white transition-colors ease-in duration-100 border-teal-500 font-extrabold">Adopt</button>
                         <div>
